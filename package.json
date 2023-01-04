@@ -1,7 +1,7 @@
 {
   "name": "smartbrain",
   "version": "0.1.0",
-  "homepage": "https://myusername.github.io/my-app",
+  "homepage": "https://0xXerkan.github.io/smartbrain",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
