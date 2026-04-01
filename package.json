@@ -4,6 +4,7 @@
   "homepage": "https://0xXerkan.github.io/smartbrain",
   "private": true,
   "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.34",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
