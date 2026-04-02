@@ -17,6 +17,7 @@ const initialState = {
   boxes: [],
   route: "signin",
   isSignedIn: false,
+  isDemo: false,
   user: {
     id: "",
     name: "",
@@ -65,6 +66,17 @@ class App extends Component {
     });
   };
 
+  setDemoMode = () => {
+    // console.log("Demo mode activated");
+    this.setState({
+      user: {
+        name: "Demo User",
+        entries: 0,
+      },
+    });
+    this.setState({ isDemo: true });
+  };
+  
   calcFaceLocation = async (imageUrl) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -105,17 +117,22 @@ class App extends Component {
     try {
       const boxes = await this.calcFaceLocation(this.state.input);
       this.displayFaceBox(boxes);
-      fetch(`${SERVER_URL}/image`, {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: this.state.user.id,
-        }),
-      })
-        .then((res) => res.json())
-        .then((count) => {
-          this.setState(Object.assign(this.state.user, { entries: count }));
-        });
+      if (this.state.isDemo) {
+        const updatedEntries = Number(this.state.user.entries) + 1;
+        this.setState(Object.assign(this.state.user, { entries: updatedEntries }));
+      } else {
+        fetch(`${SERVER_URL}/image`, {
+          method: "put",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: this.state.user.id,
+          }),
+        })
+          .then((res) => res.json())
+          .then((count) => {
+            this.setState(Object.assign(this.state.user, { entries: count }));
+          });
+      }
     } catch (error) {
       console.log("error", error);
     }
@@ -155,7 +172,7 @@ class App extends Component {
             />
           </div>
         ) : this.state.route === "signin" ? (
-          <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+          <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange} setDemoMode={this.setDemoMode} />
         ) : (
           <Register
             loadUser={this.loadUser}
